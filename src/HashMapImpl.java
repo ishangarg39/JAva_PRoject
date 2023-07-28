@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class HashMapImpl {
@@ -57,6 +58,67 @@ public class HashMapImpl {
             }
         }
 
+        public V get (K key){
+            int bi=hashfunction(key); //bucket index
+            int di=searchInLL(key,bi); //data index in LL
+
+            if(di==-1) //Key doesn't exists
+            {
+                return null;
+            }
+            else //key exists
+            {
+                Node data=buckets[bi].get(di);
+                return data.value;
+            }
+        }
+
+        public boolean containsKey(K key){
+            int bi=hashfunction(key); //bucket index
+            int di=searchInLL(key,bi); //data index in LL
+
+            if(di==-1) //Key doesn't exists
+            {
+             return false;
+            }
+            else //key exists
+            {
+                return true;
+            }
+        }
+
+        public V remove(K key){
+            int bi=hashfunction(key); //bucket index
+            int di=searchInLL(key,bi); //data index in LL
+
+            if(di==-1) //Key doesn't exists
+            {
+                return null;
+            }
+            else //key exists
+            {
+                Node data=buckets[bi].remove(di);
+                n--;
+                return data.value;
+            }
+        }
+
+        public ArrayList<K> keySet(){
+            ArrayList<K> keys=new ArrayList<>();
+            for (int bi=0;bi< buckets.length;bi++){
+                LinkedList<Node> ll=buckets[bi];
+                for(int di=0;di<ll.size();di++){
+                    Node node=ll.get(di);
+                    keys.add(node.key);
+                }
+            }
+            return keys;
+        }
+        public boolean isEmpty (K key){
+            return n==0;
+        }
+
+
         public void put(K key, V value){
                 int bi=hashfunction(key); //bucket index
                 int di=searchInLL(key,bi); //data index in LL
@@ -69,7 +131,7 @@ public class HashMapImpl {
                 else //key exists
                 {
                 Node data=buckets[bi].get(di);
-                data.value=value;
+                data.value=value; //update value
                 }
 
                 double lambda=n/N;
@@ -85,5 +147,6 @@ public class HashMapImpl {
         map.put("I",120);
         map.put("U",20);
         map.put("E",10);
+
     }
 }
